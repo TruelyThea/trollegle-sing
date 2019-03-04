@@ -20,8 +20,6 @@ function say(line, wait) {
   return new Promise(function(completed, doStop) {
     stop = doStop;
     setTimeout(completed, wait);
-  }).catch(function() {
-    console.log("stopped");
   });
 }
 
@@ -32,7 +30,9 @@ function playlist(songs, repeat) {
         return sing(song.lyrics, song.chorus, song.lineDuration || 5000);
       });
     });
-  }, Promise.resolve(null));
+  }, Promise.resolve(null)).catch(function() {
+    console.log("stopped");
+  });
   return repeat ? list.then(function() { return playlist(songs, true); }) : list;
 }
 
