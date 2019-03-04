@@ -12,10 +12,13 @@ function sing(song, chorus, lineDuration) {
   }, Promise.resolve(null));
 }
 
+var stop = null; // call this to stop the music
+
 function say(line, wait) {
   document.querySelector("textarea").value = line; 
   document.querySelector(".sendbtn").click(); 
-  return new Promise(function(completed) {
+  return new Promise(function(completed, doStop) {
+    stop = doStop;
     setTimeout(completed, wait);
   });
 }
