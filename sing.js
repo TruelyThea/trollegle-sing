@@ -12,7 +12,7 @@ function sing(song, chorus, lineDuration) {
   }, Promise.resolve(null));
 }
 
-var stopped = false, doStop = function() {};;
+var stopped = false, doStop = function() {};
 var stop = function() { // call this to stop the music
   stopped = true;
   doStop();
@@ -35,12 +35,11 @@ function playlist(songs, repeat) {
   var list = songs.reduce(function(acc, song) {
     return acc.then(function() {
       return say("! Now playing: " + song.name + " !", 3000).then(function() {
-        return sing(song.lyrics, song.chorus, song.lineDuration || 5000).catch(function() {
-          if (stopped)
-            throw new Error();
-          return null;
-        });
+        return sing(song.lyrics, song.chorus, song.lineDuration || 5000);
       });
+    }).catch(function() {
+      if (stopped)
+        throw new Error();
     });
   }, Promise.resolve(null)).catch(function(){});
   return repeat ? list.then(function() {
