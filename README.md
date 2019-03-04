@@ -3,4 +3,7 @@ song singing in trollegle
 
 A bot that sings songs in trollegle (or just Omegle in general)
 
-To Run: Press `F12` or open up the developer's tools, paste the text of `sing.js` into the console, and press `enter`.
+To Run, either: 
+* 1. Follow the steps in the comment at the bottom of `sing.js`
+  2. Press `F12` or open up the developer's tools, paste that text into the console, and press `enter`.
+* or copy the text of `load.js` there into the console
