@@ -1,7 +1,7 @@
 var files = ["sing", "songs"].map(function(file) { 
   return new Promise(function(success) {
     var script = document.createElement("script")
-    script.src = "https://cdn.jsdelivr.net/gh/TruelyThea/trollegle-sing@0.2.3/" + file + ".js";
+    script.src = "https://cdn.jsdelivr.net/gh/TruelyThea/trollegle-sing@0.3.0/" + file + ".js";
     document.body.appendChild(script);
     script.addEventListener("load", success);
   });

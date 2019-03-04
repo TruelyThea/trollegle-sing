@@ -9,16 +9,26 @@ function sing(song, chorus, lineDuration) {
     return acc.then(function() {
       return say(line, lineDuration);
     });
-  }, Promise.resolve(null));
+  }, Promise.resolve(null)).catch(function() {
+    if (stopped)
+      throw new Error();
+  });
 }
 
-var stop = function() {}; // call this to stop the music
+var stopped = false, doStop = function() {};;
+var stop = function() { // call this to stop the music
+  stopped = true;
+  doStop();
+};
+var next = function() {
+  doStop();
+};
 
 function say(line, wait) {
   document.querySelector("textarea").value = line; 
   document.querySelector(".sendbtn").click(); 
-  return new Promise(function(completed, doStop) {
-    stop = doStop;
+  return new Promise(function(completed, fail) {
+    doStop = fail;
     setTimeout(completed, wait);
   });
 }
@@ -31,7 +41,13 @@ function playlist(songs, repeat) {
       });
     });
   }, Promise.resolve(null)).catch(function(){});
-  return repeat ? list.then(function() { return playlist(songs, true); }) : list;
+  return repeat ? list.then(function() {
+    if (stopped) {
+      stopped = false;
+      return null;
+    }
+    return playlist(songs, true); 
+  }) : list;
 }
 
 /* 
