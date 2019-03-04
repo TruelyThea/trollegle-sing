@@ -30,9 +30,7 @@ function playlist(songs, repeat) {
         return sing(song.lyrics, song.chorus, song.lineDuration || 5000);
       });
     });
-  }, Promise.resolve(null)).catch(function() {
-    console.log("stopped");
-  });
+  }, Promise.resolve(null)).catch(function(){});
   return repeat ? list.then(function() { return playlist(songs, true); }) : list;
 }
 
