@@ -9,10 +9,7 @@ function sing(song, chorus, lineDuration) {
     return acc.then(function() {
       return say(line, lineDuration);
     });
-  }, Promise.resolve(null)).catch(function() {
-    if (stopped)
-      throw new Error();
-  });
+  }, Promise.resolve(null));
 }
 
 var stopped = false, doStop = function() {};;
@@ -34,19 +31,21 @@ function say(line, wait) {
 }
 
 function playlist(songs, repeat) {
+  stopped = false;
   var list = songs.reduce(function(acc, song) {
     return acc.then(function() {
       return say("! Now playing: " + song.name + " !", 3000).then(function() {
-        return sing(song.lyrics, song.chorus, song.lineDuration || 5000);
+        return sing(song.lyrics, song.chorus, song.lineDuration || 5000).catch(function() {
+          if (stopped)
+            throw new Error();
+          return null;
+        });
       });
     });
   }, Promise.resolve(null)).catch(function(){});
   return repeat ? list.then(function() {
-    if (stopped) {
-      stopped = false;
-      return null;
-    }
-    return playlist(songs, true); 
+    if (!stopped)
+      return playlist(songs, true); 
   }) : list;
 }
 
